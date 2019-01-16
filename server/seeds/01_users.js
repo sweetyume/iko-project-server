@@ -4,18 +4,18 @@ exports.seed = (knex, Promise) => {
     .then(() => {
       const users = [
         {
-          user_firstname: "Berto",
-          user_lastname: "Ortega",
-          user_username: "LalaBerto",
-          user_email: "berto.ort@gmail.com",
-          user_password: "pineapple"
+          firstname: "Berto",
+          lastname: "Ortega",
+          username: "LalaBerto",
+          email: "berto.ort@gmail.com",
+          password: "pineapple"
         },
         {
-          user_firstname: "Hello",
-          user_lastname: "World",
-          user_username: "HelloOit",
-          user_email: "hello@cjr.co.de",
-          user_password: "keyboard_cat"
+          firstname: "Hello",
+          lastname: "World",
+          username: "HelloOit",
+          email: "hello@cjr.co.de",
+          password: "keyboard_cat"
         }
       ];
       return knex("users").insert(users);

@@ -1,14 +1,14 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable("users", table => {
     table
-      .increments("user_id")
+      .increments("id")
       .unsigned()
       .primary();
-    table.string("user_firstname").notNullable();
-    table.string("user_lastname").notNullable();
-    table.string("user_username").notNullable();
-    table.string("user_email");
-    table.string("user_password");
+    table.string("firstname");
+    table.string("lastname");
+    table.string("username");
+    table.string("credentials");
+    table.string("login");
   });
 };
 

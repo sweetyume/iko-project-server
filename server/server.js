@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import config from "./config/config";
-import usersRoute from "./routes/usersRoute";
+import usersRoutes from "./routes/usersRoute";
+import authRoutes from "./routes/authRoute";
+import articlesRoutes from "./routes/articlesRoute";
 
 const server = express();
 
@@ -9,7 +11,9 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cors());
 
-server.use("/", usersRoute);
+server.use("/", authRoutes);
+server.use("/", usersRoutes);
+server.use("/", articlesRoutes);
 
 server.listen(config.port, () => {
   console.log(`Started on port ${config.port}`);
@@ -23,10 +27,12 @@ server.use((req, res, next) => {
 });
 
 // error handler
-server.use((req, res, next) => {
+server.use((err, req, res) => {
   res.status(err.status || 500);
   res.json({
     message: err.message,
     error: req.server.get("env") === "development" ? err : {}
   });
 });
+
+module.exports = server;

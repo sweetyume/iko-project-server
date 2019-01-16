@@ -1,4 +1,4 @@
-import knex from "../db/connection"; // la connection
+const knex = require("../db/connection"); // la connection
 
 module.exports = {
   getAll() {
@@ -6,20 +6,25 @@ module.exports = {
   },
   getOne(id) {
     return knex("users")
-      .where("user_id", id)
+      .where("id", id)
       .first();
   },
-  create(user) {
+  getOneByEmail(email) {
+    return knex("users")
+      .where("email", email)
+      .first();
+  },
+  createOne(user) {
     return knex("users").insert(user, "*");
   },
   updateOne(id, user) {
     return knex("users")
-      .where("user_id", id)
+      .where("id", id)
       .update(user, "*");
   },
   deleteOne(id) {
     return knex("users")
-      .where("user_id", id)
+      .where("id", id)
       .del();
   }
 };
