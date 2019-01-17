@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-// const knex = require("../db/connection"); // la connection
 const client = require("../db/connection");
 
 const {
   getUsers,
-  createUsers,
+  getUserById,
+  createUser,
   editUsers,
-  deleteUsers
+  deleteUser
 } = require("../controller/usersQueries");
 
 router.get("/users", async (req, res) => {
@@ -23,13 +23,25 @@ router.get("/users", async (req, res) => {
   return res.status(200).send(queryResult.rows);
 });
 
-router.post("/add", async (req, res) => {
+router.get("/users/:id", async (req, res) => {
+  let getOneResult = null;
+  try {
+    getOneResult = await getUserById(req.params.id);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send(new Error("Erreur dans l'acquisition d'un user'", error));
+  }
+  return res.status(200).send(getOneResult.rows);
+});
+
+router.post("/users", async (req, res) => {
   let insertUserResult = null;
   try {
-    insertUserResult = await createUsers({
+    insertUserResult = await createUser({
       username: req.body.username,
       login: req.body.login,
-      email: req.body.email,
       password: req.body.password
     });
   } catch (error) {
@@ -39,13 +51,12 @@ router.post("/add", async (req, res) => {
   return res.status(200).send(insertUserResult.rows);
 });
 
-router.put("/edit/:id", async (req, res) => {
+router.put("/users/edit/:id", async (req, res) => {
   let editUserResult = null;
   try {
     // assign
     editUserResult = await editUsers(req.params.id, {
-      username: req.body.username,
-      email: req.body.email
+      username: req.body.username
     });
   } catch (error) {
     console.log(error);
@@ -54,10 +65,10 @@ router.put("/edit/:id", async (req, res) => {
   return res.status(200).send(editUserResult.rows);
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/users/delete/:id", async (req, res) => {
   let deleteUserResult = null;
   try {
-    deleteUserResult = await deleteUsers(req.params.id);
+    deleteUserResult = await deleteUser(req.params.id);
   } catch (error) {
     console.log(error);
     res
@@ -68,6 +79,8 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 module.exports = router;
+
+// const knex = require("../db/connection"); // la connection
 
 // function isValidId(req, res, next) {
 //   if (!isNaN(req.params.id)) return next();

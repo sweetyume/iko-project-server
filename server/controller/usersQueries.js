@@ -11,20 +11,38 @@ module.exports = {
     const queryResult = await client.query(query);
     return queryResult;
   },
-  createUsers: async userInfos => {
-    console.log(userInfos.password, userInfos.lastname);
+  getUserById: async id => {
+    const getOne = SQL`
+    SELECT
+     *
+    FROM users
+    WHERE id = ${id}
+    `;
+    const getOneResult = await client.query(getOne);
+    return getOneResult;
+  },
+  getUserByLogin: async login => {
+    const getOne = SQL`
+    SELECT
+     *
+    FROM users
+    WHERE login = ${login}
+    `;
+    const getOneResult = await client.query(getOne);
+    return getOneResult.rows[0];
+  },
+  createUser: async userInfos => {
+    console.log(userInfos.password, userInfos.username);
     const insertUser = SQL`
      INSERT INTO users (
          username,
          credentials,
-         login,
-         email
+         login
 
      ) VALUES (
          ${userInfos.username},
          ${userInfos.credentials},
-         ${userInfos.login},
-         ${userInfos.email}
+         ${userInfos.login}
      ) RETURNING *
      `;
     const insertUserResult = await client.query(insertUser);
@@ -33,15 +51,14 @@ module.exports = {
   editUsers: async (id, userInfos) => {
     const editUser = SQL`
      UPDATE users
-     SET username = ${userInfos.username},
-         email = ${userInfos.email}
+     SET username = ${userInfos.username}
      WHERE id = ${id}
      RETURNING *
      `;
     const editUserResult = await client.query(editUser);
     return editUserResult;
   },
-  deleteUsers: async id => {
+  deleteUser: async id => {
     const deleteUser = SQL`
     DELETE FROM users
     WHERE id = ${id}
@@ -51,6 +68,7 @@ module.exports = {
     return deleteUserResult;
   }
 };
+
 // const knex = require("../db/connection"); // la connection
 
 // module.exports = {

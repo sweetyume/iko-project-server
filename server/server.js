@@ -1,9 +1,9 @@
-import express from "express";
-import cors from "cors";
-import config from "./config/config";
-import usersRoutes from "./routes/usersRoute";
-import authRoutes from "./routes/authRoute";
-import articlesRoutes from "./routes/articlesRoute";
+const express = require("express");
+const cors = require("cors");
+const config = require("./config/config");
+const usersRoutes = require("./routes/usersRoute");
+const authRoutes = require("./routes/authRoute");
+const articlesRoutes = require("./routes/articlesRoute");
 
 const server = express();
 
@@ -15,8 +15,8 @@ server.use("/", authRoutes);
 server.use("/", usersRoutes);
 server.use("/", articlesRoutes);
 
-server.listen(config.port, () => {
-  console.log(`Started on port ${config.port}`);
+server.listen(config.config, () => {
+  console.log(`Started on port ${config.config}`);
 });
 
 // catch 404 and forward to error handler

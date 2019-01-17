@@ -7,7 +7,11 @@ const hashCredentials = user => {
   const salt = bcrypt.genSaltSync(10);
   const credentials = bcrypt.hashSync(user.login + user.password, salt);
 
-  return { login: user.login, credentials: credentials };
+  return {
+    username: user.username,
+    login: user.login,
+    credentials: credentials
+  };
 };
 
 const generateToken = user => {
@@ -32,13 +36,13 @@ const verifyLogin = (reqUser, bddUser) => {
 module.exports = {
   register: async (req, res) => {
     const newUser = hashCredentials(req.body);
-    await User.createOne(newUser);
+    await User.createUser(newUser);
     newUser.token = generateToken(newUser);
     res.send(newUser);
   },
   login: async (req, res) => {
-    const result = await User.getOne(req.body);
-    const bddUser = result.rows[0];
+    const result = await User.getUserByLogin(req.body.login);
+    const bddUser = result;
     const logged = verifyLogin(req.body, bddUser);
     if (logged.success) {
       bddUser.token = generateToken(bddUser);
