@@ -1,5 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const moment = require("moment");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const client = require("../db/connection");
 
 const {
@@ -8,7 +12,20 @@ const {
   createArticle,
   editArticle,
   deleteArticle
-} = require("../controller/articlesQueries");
+} = require("../controllers/articles");
+
+// const uploadPath = path.join(__dirname, "../uploads");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+// const storage = multer.diskStorage({
+//   destination: (request, file, cb) => {
+//     cb(null, uploadPath);
+//   },
+//   filename: (request, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+//   limits: { fieldNameSize: 500 }
+// });
 
 router.get("/articles", async (req, res) => {
   let queryResult = null;
@@ -24,25 +41,37 @@ router.get("/articles", async (req, res) => {
 });
 
 router.get("/articles/:id", async (req, res) => {
-  let getOneResult = null;
+  let article = null;
   try {
-    getOneResult = await getOneArticle(req.params.id);
+    article = await getOneArticle(req.params.id);
+    const writePath = path.join(
+      __dirname,
+      "../uploads/",
+      article.image_file_path
+    );
+    const file = await fs.promises.readFile(writePath);
+    article.file = file;
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(500)
       .send(new Error("Erreur dans l'acquisition d'un article'", error));
   }
-  return res.status(200).send(getOneResult.rows);
+  return res.status(200).send(article);
 });
 
-router.post("/articles", async (req, res) => {
+router.post("/articles", upload.single("image"), async (req, res) => {
   let insertArticleResult = null;
+  const writePath = path.join(__dirname, "../uploads/", req.file.originalname);
   try {
+    await fs.promises.writeFile(writePath, req.file.buffer);
     insertArticleResult = await createArticle({
+      user_id: req.body.user_id,
       country: req.body.country,
       title: req.body.title,
-      description: req.body.description
+      description: req.body.description,
+      imageFilePath: req.file.originalname,
+      created_at: moment()
     });
   } catch (error) {
     console.log(error);

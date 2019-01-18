@@ -14,12 +14,29 @@ module.exports = {
   getOneArticle: async id => {
     const getOneArticle = SQL`
     SELECT
-     *
+      title,
+      country,
+      description,
+      image_file_path
     FROM articles
     WHERE id = ${id}
     `;
     const getOneArticleResult = await client.query(getOneArticle);
-    return getOneArticleResult;
+    return getOneArticleResult.rows[0];
+  },
+  getAllArticlesByUserId: async id => {
+    const getAllArticles = SQL`
+    SELECT 
+      title,
+      country,
+      description,
+      image_file_path
+    FROM articles
+    INNER JOIN users AS usr ON usr.id = articles.user_id
+    WHERE usr.id = ${id}
+    `;
+    const getAllArticlesResult = await client.query(getAllArticles);
+    return getAllArticlesResult.rows;
   },
   createArticle: async articleInfos => {
     console.log(articleInfos.country, articleInfos.title);
@@ -29,14 +46,18 @@ module.exports = {
          title,
          description,
          created_at,
-         updated_at
+         updated_at,
+         user_id,
+         image_file_path
 
      ) VALUES (
          ${articleInfos.country},
          ${articleInfos.title},
          ${articleInfos.description},
          ${articleInfos.created_at},
-         ${articleInfos.updated_at}
+         ${articleInfos.updated_at},
+         ${articleInfos.user_id},
+        ${articleInfos.imageFilePath}
      ) RETURNING *
      `;
     const insertArticleResult = await client.query(insertArticle);
@@ -47,6 +68,7 @@ module.exports = {
      UPDATE articles
      SET title = ${articleInfos.title},
          country = ${articleInfos.country}
+         description = ${articleInfos.description}
      WHERE id = ${id}
      RETURNING *
      `;
@@ -63,59 +85,3 @@ module.exports = {
     return deleteArticleResult;
   }
 };
-// const knex = require("../db/connection"); // la connection
-
-// module.exports = {
-//   getAll() {
-//     return knex("users").select("*");
-//   },
-//   getOneArticle(id) {
-//     return knex("users")
-//       .where("id", id)
-//       .first();
-//   },
-//   getOneByEmail(email) {
-//     return knex("users")
-//       .where("email", email)
-//       .first();
-//   },
-//   createOne(user) {
-//     return knex("users").insert(user, "*");
-//   },
-//   updateOne(id, user) {
-//     return knex("users")
-//       .where("id", id)
-//       .update(user, "*");
-//   },
-//   deleteOne(id) {
-//     return knex("users")
-//       .where("id", id)
-//       .del();
-//   }
-// };
-
-// const knex = require("../db/connection"); // la connection
-
-// module.exports = {
-//   getAllArticles() {
-//     return knex("articles").select("*");
-//   },
-//   getArticle(id) {
-//     return knex("articles")
-//       .where("id", id)
-//       .first();
-//   },
-//   createArticle(article) {
-//     return knex("articles").insert(article, "*");
-//   },
-//   updateArticle(id, article) {
-//     return knex("articles")
-//       .where("id", id)
-//       .update(article, "*");
-//   },
-//   deleteArticle(id) {
-//     return knex("articles")
-//       .where("id", id)
-//       .del();
-//   }
-// };

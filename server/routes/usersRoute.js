@@ -8,7 +8,23 @@ const {
   createUser,
   editUsers,
   deleteUser
-} = require("../controller/usersQueries");
+} = require("../controllers/users");
+const { getAllArticlesByUserId } = require("../controllers/articles");
+
+router.get("/users/:id/articles", async (req, res) => {
+  let queryResult = null;
+  try {
+    queryResult = await getAllArticlesByUserId(req.params.id);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send(
+        new Error("Erreur dans l'acquisition des articles d'un user", error)
+      );
+  }
+  return res.status(200).send(queryResult);
+});
 
 router.get("/users", async (req, res) => {
   let queryResult = null;
@@ -79,81 +95,3 @@ router.delete("/users/delete/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-// const knex = require("../db/connection"); // la connection
-
-// function isValidId(req, res, next) {
-//   if (!isNaN(req.params.id)) return next();
-//   next(new Error("Invalid ID"));
-// }
-// function validUser(user) {
-//   const hasUsername =
-//     typeof user.username == "string" && user.username.trim() != "";
-//   // const hasFirstname =
-//   //   typeof user.firstname == "string" && user.firstname.trim() != "";
-//   // const hasLastname =
-//   //   typeof user.lastname == "string" && user.lastname.trim() != "";
-//   // const hasEmail = typeof user.email == "string" && user.email.trim() != "";
-//   // const hasPassword =
-//   //   typeof user.password == "string" && user.password.trim() != "";
-
-//   // return hasFirstname && hasLastname && hasEmail && hasPassword;
-//   return hasUsername;
-// }
-
-// router.get("/users", (req, res) => {
-//   queries.getAll().then(users => {
-//     res.json(users);
-//   });
-// });
-
-// router.get("/users/:id", isValidId, (req, res, next) => {
-//   queries.getOne(req.params.id).then(user => {
-//     if (user) {
-//       res.json({ user });
-//     } else {
-//       res.status(404);
-//       next();
-//     }
-//   });
-// });
-
-// router.get("/user/:id", (req, res) => {
-//   knex
-//     .select("description", "title", "username")
-//     .from("articles")
-//     .innerJoin("users", "articles.user_id", "users.id")
-//     .where("articles.user_id", req.params.id)
-//     .then(function(data) {
-//       res.json(data);
-//     });
-// });
-
-// router.post("/users", (req, res, next) => {
-//   if (validUser(req.body)) {
-//     queries.createOne(req.body).then(users => {
-//       res.json(users[0]);
-//     });
-//   } else {
-//     next(new Error("Invalid user"));
-//   }
-// });
-
-// router.put("/users/:id", isValidId, (req, res, next) => {
-//   if (validUser(req.body)) {
-//     queries.updateOne(req.params.id, req.body).then(users => {
-//       res.json(users[0]);
-//     });
-//   } else {
-//     next(new Error("Invalid user"));
-//   }
-// });
-
-// router.delete("/users/:id", isValidId, (req, res) => {
-//   queries.deleteOne(req.params.id).then(() => {
-//     res.json({
-//       deleted: true
-//     });
-//   });
-// });
-// module.exports = router;

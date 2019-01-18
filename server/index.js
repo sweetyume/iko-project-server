@@ -1,6 +1,6 @@
-const auth = require("./controller/auth");
-const users = require("./controller/usersQueries");
-const articles = require("./controller/articlesQueries");
+const auth = require("./controllers/auth");
+const users = require("./controllers/users");
+const articles = require("./controllers/articles");
 
 module.exports = {
   auth,

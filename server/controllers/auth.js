@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
-const User = require("./usersQueries");
+const User = require("./users");
 
 const hashCredentials = user => {
   const salt = bcrypt.genSaltSync(10);
@@ -34,6 +34,9 @@ const verifyLogin = (reqUser, bddUser) => {
 };
 
 module.exports = {
+  hashCredentials,
+  verifyLogin,
+  generateToken,
   register: async (req, res) => {
     const newUser = hashCredentials(req.body);
     await User.createUser(newUser);

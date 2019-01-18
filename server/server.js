@@ -7,16 +7,16 @@ const articlesRoutes = require("./routes/articlesRoute");
 
 const server = express();
 
-server.use(express.json());
-server.use(express.urlencoded({ extended: false }));
+server.use(express.json({ limit: "50mb" }));
+server.use(express.urlencoded({ extended: false, limit: "50mb" }));
 server.use(cors());
 
 server.use("/", authRoutes);
 server.use("/", usersRoutes);
 server.use("/", articlesRoutes);
 
-server.listen(config.config, () => {
-  console.log(`Started on port ${config.config}`);
+server.listen(config.port, () => {
+  console.log(`Started on port ${config.port}`);
 });
 
 // catch 404 and forward to error handler
