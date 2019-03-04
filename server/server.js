@@ -1,19 +1,16 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const config = require("./config/config");
-const usersRoutes = require("./routes/usersRoute");
-const authRoutes = require("./routes/authRoute");
-const articlesRoutes = require("./routes/articlesRoute");
+const router = require("./routes/routerIndex");
 
 const server = express();
 
+server.use(cookieParser());
 server.use(express.json({ limit: "50mb" }));
-server.use(express.urlencoded({ extended: false, limit: "50mb" }));
+server.use(express.urlencoded({ extended: true, limit: "50mb" }));
 server.use(cors());
-
-server.use("/", authRoutes);
-server.use("/", usersRoutes);
-server.use("/", articlesRoutes);
+server.use(router);
 
 server.listen(config.port, () => {
   console.log(`Started on port ${config.port}`);

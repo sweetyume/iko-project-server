@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const client = require("../db/connection");
+const { generateToken } = require("../Authentication");
 
 const {
   getUsers,
@@ -11,6 +12,22 @@ const {
 } = require("../controllers/users");
 const { getAllArticlesByUserId } = require("../controllers/articles");
 
+router.post("/register", async (req, res) => {
+  const userInfos = {
+    username: req.body.user.username,
+    password: req.body.user.password,
+    login: req.body.user.login
+  };
+  try {
+    const addedUser = await createUser(userInfos);
+    const token = generateToken(addedUser.id);
+    res.cookie(token);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error.message);
+  }
+  return res.status(200).send(userInfos);
+});
 router.get("/users/:id/articles", async (req, res) => {
   let queryResult = null;
   try {
@@ -51,22 +68,6 @@ router.get("/users/:id", async (req, res) => {
   }
   return res.status(200).send(getOneResult.rows);
 });
-
-router.post("/users", async (req, res) => {
-  let insertUserResult = null;
-  try {
-    insertUserResult = await createUser({
-      username: req.body.username,
-      login: req.body.login,
-      password: req.body.password
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(new Error("Erreur dans l'insertion d'un user", error));
-  }
-  return res.status(200).send(insertUserResult.rows);
-});
-
 router.put("/users/edit/:id", async (req, res) => {
   let editUserResult = null;
   try {

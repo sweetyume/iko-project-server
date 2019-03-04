@@ -1,18 +1,17 @@
 const SQL = require("sql-template-strings");
 const client = require("../db/connection");
 
-module.exports = {
-  getArticles: async client => {
-    const query = SQL`
+const getArticle = async client => {
+  const query = SQL`
     SELECT
     *
     FROM articles
     `;
-    const queryResult = await client.query(query);
-    return queryResult;
-  },
-  getOneArticle: async id => {
-    const getOneArticle = SQL`
+  const queryResult = await client.query(query);
+  return queryResult;
+};
+const getOneArticle = async id => {
+  const getOneArticle = SQL`
     SELECT
       title,
       country,
@@ -21,11 +20,11 @@ module.exports = {
     FROM articles
     WHERE id = ${id}
     `;
-    const getOneArticleResult = await client.query(getOneArticle);
-    return getOneArticleResult.rows[0];
-  },
-  getAllArticlesByUserId: async id => {
-    const getAllArticles = SQL`
+  const getOneArticleResult = await client.query(getOneArticle);
+  return getOneArticleResult.rows[0];
+};
+const getAllArticlesByUserId = async id => {
+  const getAllArticles = SQL`
     SELECT 
       title,
       country,
@@ -35,12 +34,12 @@ module.exports = {
     INNER JOIN users AS usr ON usr.id = articles.user_id
     WHERE usr.id = ${id}
     `;
-    const getAllArticlesResult = await client.query(getAllArticles);
-    return getAllArticlesResult.rows;
-  },
-  createArticle: async articleInfos => {
-    console.log(articleInfos.country, articleInfos.title);
-    const insertArticle = SQL`
+  const getAllArticlesResult = await client.query(getAllArticles);
+  return getAllArticlesResult.rows;
+};
+const createArticle = async articleInfos => {
+  console.log(articleInfos.country, articleInfos.title);
+  const insertArticle = SQL`
      INSERT INTO articles (
          country,
          title,
@@ -60,28 +59,37 @@ module.exports = {
         ${articleInfos.imageFilePath}
      ) RETURNING *
      `;
-    const insertArticleResult = await client.query(insertArticle);
-    return insertArticleResult;
-  },
-  editArticle: async (id, articleInfos) => {
-    const editArticle = SQL`
+  const insertArticleResult = await client.query(insertArticle);
+  return insertArticleResult;
+};
+const editArticle = async (id, articleInfos) => {
+  const editArticle = SQL`
      UPDATE articles
      SET title = ${articleInfos.title},
-         country = ${articleInfos.country}
-         description = ${articleInfos.description}
+         country = ${articleInfos.country},
+         description = ${articleInfos.description},
+         user_id = ${articlesInfos.user_id}
      WHERE id = ${id}
      RETURNING *
      `;
-    const editArticleResult = await client.query(editArticle);
-    return editArticleResult;
-  },
-  deleteArticle: async id => {
-    const deleteArticle = SQL`
+  const editArticleResult = await client.query(editArticle);
+  return editArticleResult;
+};
+const deleteArticle = async id => {
+  const deleteArticle = SQL`
     DELETE FROM articles
     WHERE id = ${id}
     RETURNING *
     `;
-    const deleteArticleResult = await client.query(deleteArticle);
-    return deleteArticleResult;
-  }
+  const deleteArticleResult = await client.query(deleteArticle);
+  return deleteArticleResult;
+};
+
+module.exports = {
+  getArticle,
+  getOneArticle,
+  getAllArticlesByUserId,
+  createArticle,
+  editArticle,
+  deleteArticle
 };

@@ -1,5 +1,18 @@
+// {
+//     "presets": [
+//         "env", "es2015"
+//     ]
+// }
 {
     "presets": [
-        "env"
+        ["env", {
+            "targets": {
+                "browsers": [
+                    ">0.25%",
+                    "not ie 11",
+                    "not op_mini all"
+                ]
+            }
+        }]
     ]
 }

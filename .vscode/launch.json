@@ -7,6 +7,9 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
+        "env": {
+            "JWT_SECRET": "secret"
+        },
         "program": "${workspaceFolder}/server/server.js"
     }]
 }
