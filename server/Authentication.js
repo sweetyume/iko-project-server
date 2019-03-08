@@ -15,4 +15,28 @@ const generateToken = userId => {
   }
 };
 
-module.exports = { generateToken };
+const validateToken = async (req, res, next) => {
+  if (req.path === "/login" || req.path === "/auth") {
+    next();
+  } else if (!req.cookies.token) {
+    res.redirect("/");
+  } else {
+    const { token } = req.cookies;
+
+    const secret = process.env.JWT_SECRET;
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        console.log("JWT invalide", req.path, err);
+        res.clearCookie();
+        return res.redirect("/");
+      }
+      console.log("Token validé pour", req.path);
+
+      const session = { id: decoded.id };
+      req.session = session;
+      next();
+    });
+  }
+};
+
+module.exports = { generateToken, validateToken };

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node server/server.js",
-    "dev": "nodemon server/server.js --exec babel-node ",
+    "dev": "JWT_SECRET=secret nodemon server/server.js --exec babel-node ",
     "babel-node": "npx babel server/server.js --watch--out file dist/compile.js"
   },
   "keywords": [],

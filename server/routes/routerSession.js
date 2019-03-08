@@ -1,11 +1,10 @@
 const express = require("express");
-const router = express.Router();
 const { generateToken } = require("../Authentication");
 const verifyUser = require("../controllers/verifyUser");
+const router = express.Router();
 
 router.post("/login", async (req, res) => {
   let userToLogin = null;
-
   try {
     userToLogin = await verifyUser(req.body.login, req.body.password);
   } catch (error) {

@@ -21,6 +21,21 @@ const getUserById = async id => {
   const getOneResult = await client.query(getOne);
   return getOneResult;
 };
+const getOneUser = async id => {
+  const getOne = SQL`
+  SELECT 
+    login,
+    username, 
+    password
+  FROM users
+  WHERE id = ${id}
+  `;
+  const getOneResult = await client.query(getOne);
+  if (!getOneResult.rowCount) {
+    throw new Error("Pas de User avec id :", id);
+  }
+  return getOneResult.rows[0];
+};
 const getUserByLogin = async login => {
   const getOne = SQL`
     SELECT
@@ -91,6 +106,7 @@ const deleteUser = async id => {
 module.exports = {
   getUsers,
   getUserById,
+  getOneUser,
   getUserByLogin,
   createUser,
   verifyUsernameExists,
