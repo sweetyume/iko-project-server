@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { getOneUser } = require('./users');
 
-const getUserFromToken = async jwtToken => {
+const getUserToken = async jwtToken => {
 	if (!jwtToken) {
 		throw new Error('Pas de Token');
 	}
@@ -15,4 +15,4 @@ const getUserFromToken = async jwtToken => {
 	return user;
 };
 
-module.exports = getUserFromToken;
+module.exports = getUserToken;

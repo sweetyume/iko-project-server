@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const { validateToken } = require('./Authentication');
 const config = require('./config/config');
 const router = require('./routes/routerIndex');
-const { validateToken } = require('./Authentication');
 const getUserToken = require('./controllers/getUserToken');
 
 const server = express();
@@ -20,7 +20,7 @@ server.get('/auth', async (req, res) => {
 	try {
 		user = await getUserToken(req.cookies.token);
 	} catch (error) {
-		console.log('Erreur authentication: ' + error);
+		console.log("Erreur dans l'authentication : " + error);
 		return res.status(401).send({
 			authenticated: false,
 			user: null
