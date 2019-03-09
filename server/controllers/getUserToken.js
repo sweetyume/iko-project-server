@@ -11,7 +11,7 @@ const getUserToken = async jwtToken => {
 		throw new Error('Décodage du token échoué');
 	}
 
-	const user = await getOneUser(verifiedToken.id);
+	const user = await getOneUser(verifiedToken.userId);
 	return user;
 };
 

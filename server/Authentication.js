@@ -16,7 +16,7 @@ const generateToken = userId => {
 };
 
 const validateToken = async (req, res, next) => {
-  if (req.path === "/login" || req.path === "/auth") {
+  if (req.path === "/login" || req.path === "/auth" || req.path === "/register") {
     next();
   } else if (!req.cookies.token) {
     res.redirect("/");
