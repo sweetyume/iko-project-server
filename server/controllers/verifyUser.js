@@ -7,7 +7,8 @@ const verifyUser = async (login, password) => {
     SELECT 
       username,
       password,
-      login
+      login,
+      1
     FROM users
     WHERE login = ${login}
     `;
