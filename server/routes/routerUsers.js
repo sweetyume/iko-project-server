@@ -66,7 +66,7 @@ router.get('/users/:id', async (req, res) => {
 			.status(500)
 			.send(new Error("Erreur dans l'acquisition d'un user'", error));
 	}
-	return res.status(200).send(getOneResult.rows);
+	return res.status(200).send(getOneResult);
 });
 
 router.put('/users/edit/:id', async (req, res) => {
