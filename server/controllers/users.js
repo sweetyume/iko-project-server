@@ -11,17 +11,17 @@ const getUsers = async client => {
 	const queryResult = await client.query(query);
 	return queryResult;
 };
-const getUserById = async id => {
+const getUserById = async userId => {
 	const getOne = SQL`
     SELECT
      *
     FROM users
-    WHERE id = ${id}
+    WHERE id = ${userId}
     `;
 	const getOneResult = await client.query(getOne);
 	return getOneResult;
 };
-const getOneUser = async id => {
+const getOneUser = async userId => {
 	const getOne = SQL`
   SELECT 
     login,
@@ -29,11 +29,11 @@ const getOneUser = async id => {
     password,
     id
   FROM users
-  WHERE id = ${id}
+  WHERE id = ${userId}
   `;
 	const getOneResult = await client.query(getOne);
 	if (!getOneResult.rowCount) {
-		throw new Error('Pas de User avec id :', id);
+		throw new Error('Pas de User avec id :', userId);
 	}
 	return getOneResult.rows[0];
 };

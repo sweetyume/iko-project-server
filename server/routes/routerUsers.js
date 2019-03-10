@@ -1,8 +1,5 @@
-const express = require('express');
+const { Router } = require('express');
 const client = require('../db/connection');
-const { generateToken } = require('../Authentication');
-const router = express.Router();
-
 const {
 	getUsers,
 	getUserById,
@@ -11,6 +8,9 @@ const {
 	deleteUser
 } = require('../controllers/users');
 const { getAllArticlesByUserId } = require('../controllers/articles');
+const { generateToken } = require('../Authentication');
+
+const router = Router();
 
 router.post('/register', async (req, res) => {
 	const userInfos = {
@@ -68,6 +68,7 @@ router.get('/users/:id', async (req, res) => {
 	}
 	return res.status(200).send(getOneResult.rows);
 });
+
 router.put('/users/edit/:id', async (req, res) => {
 	let editUserResult = null;
 	try {

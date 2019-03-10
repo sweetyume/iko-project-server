@@ -20,7 +20,8 @@ const validateToken = async (req, res, next) => {
 		req.path === '/login' ||
 		req.path === '/auth' ||
 		req.path === '/register' ||
-		req.path === '/articles'
+		req.path === '/articles' ||
+		req.path === '/profil'
 	) {
 		next();
 	} else if (!req.cookies.token) {
@@ -37,7 +38,7 @@ const validateToken = async (req, res, next) => {
 			}
 			console.log('Token validé pour', req.path);
 
-			const session = { id: decoded.id };
+			const session = { userId: decoded.userId };
 			req.session = session;
 			next();
 		});
