@@ -18,8 +18,8 @@ const getUserById = async userId => {
     FROM users
     WHERE id = ${userId}
     `;
-	const getOneResult = await client.query(getOne);
-	return getOneResult;
+    const results = await client.query(getOne);
+    return results.rows[0];
 };
 const getOneUser = async userId => {
 	const getOne = SQL`
