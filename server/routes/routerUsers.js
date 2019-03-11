@@ -81,7 +81,7 @@ router.post('/users/edit/:id', async (req, res) => {
 		console.log(error);
 		res.status(500).send(new Error("Erreur dans l'édition d'un user", error));
 	}
-	return res.status(200).send(editUserResult.rows);
+	return res.status(200).send(editUserResult);
 });
 
 router.delete('/users/delete/:id', async (req, res) => {
