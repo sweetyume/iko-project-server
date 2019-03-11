@@ -85,8 +85,8 @@ const editUsers = async (userId, userInfos) => {
 	const encryptedPassword = await encryptPassword(userInfos.password);
 	const editUser = SQL`
      UPDATE users
-        SET username = ${userInfos.username}
-            login = ${userInfos.login}
+        SET username = ${userInfos.username},
+            login = ${userInfos.login},
             password = ${encryptedPassword}
         WHERE id = ${userId}
      RETURNING *

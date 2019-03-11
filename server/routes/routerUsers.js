@@ -72,7 +72,7 @@ router.get('/users/:id', async (req, res) => {
 router.post('/users/edit/:id', async (req, res) => {
 	let editUserResult = null;
 	try {
-		editUserResult = await editUsers(req.body.userId, {
+		editUserResult = await editUsers(req.body.user_id, {
 			username: req.body.user.username,
 			login: req.body.user.login,
 			password: req.body.user.password
