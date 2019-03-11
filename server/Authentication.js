@@ -20,8 +20,7 @@ const validateToken = async (req, res, next) => {
 		req.path === '/login' ||
 		req.path === '/auth' ||
 		req.path === '/register' ||
-		req.path === '/articles' ||
-		req.path === '/profil'
+		req.path === '/articles'
 	) {
 		next();
 	} else if (!req.cookies.token) {

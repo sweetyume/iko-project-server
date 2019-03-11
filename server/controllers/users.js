@@ -18,8 +18,8 @@ const getUserById = async userId => {
     FROM users
     WHERE id = ${userId}
     `;
-    const results = await client.query(getOne);
-    return results.rows[0];
+	const results = await client.query(getOne);
+	return results.rows[0];
 };
 const getOneUser = async userId => {
 	const getOne = SQL`
@@ -81,14 +81,14 @@ const verifyUsernameExists = async login => {
 	}
 	return false;
 };
-const editUsers = async (id, userInfos) => {
+const editUsers = async (userId, userInfos) => {
 	const encryptedPassword = await encryptPassword(userInfos.password);
 	const editUser = SQL`
      UPDATE users
-     SET username = ${userInfos.username}
-         login = ${userInfos.login}
-         password = ${encryptedPassword}
-     WHERE id = ${id}
+        SET username = ${userInfos.username}
+            login = ${userInfos.login}
+            password = ${encryptedPassword}
+        WHERE id = ${userId}
      RETURNING *
      `;
 	const editUserResult = await client.query(editUser);

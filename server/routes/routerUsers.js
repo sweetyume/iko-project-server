@@ -69,12 +69,13 @@ router.get('/users/:id', async (req, res) => {
 	return res.status(200).send(getOneResult);
 });
 
-router.put('/users/edit/:id', async (req, res) => {
+router.post('/users/edit/:id', async (req, res) => {
 	let editUserResult = null;
 	try {
-		// assign
-		editUserResult = await editUsers(req.params.id, {
-			username: req.body.username
+		editUserResult = await editUsers(req.body.user_id, {
+			username: req.body.user.username,
+			login: req.body.user.login,
+			password: req.body.user.password
 		});
 	} catch (error) {
 		console.log(error);
