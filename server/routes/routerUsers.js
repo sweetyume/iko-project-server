@@ -69,18 +69,19 @@ router.get('/users/:id', async (req, res) => {
 	return res.status(200).send(getOneResult);
 });
 
-router.put('/users/edit/:id', async (req, res) => {
+router.post('/users/edit/:id', async (req, res) => {
 	let editUserResult = null;
 	try {
-		// assign
-		editUserResult = await editUsers(req.params.id, {
-			username: req.body.username
+		editUserResult = await editUsers(req.body.userId, {
+			username: req.body.user.username,
+			login: req.body.user.login,
+			password: req.body.user.password
 		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).send(new Error("Erreur dans l'édition d'un user", error));
 	}
-	return res.status(200).send(editUserResult.rows);
+	return res.status(200).send(editUserResult);
 });
 
 router.delete('/users/delete/:id', async (req, res) => {
